@@ -215,9 +215,9 @@ DirectX::ScratchImage LoadTexture(const std::string& filePath)
 	
 	assert(SUCCEEDED(hr));
 
-
 	return mipImages;
 }
+
 ID3D12Resource* CreateTexureResource(ID3D12Device*device,const DirectX::TexMetadata& metadata)
 {
 	//metadataを基にResourceの設定
@@ -746,12 +746,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
 
 
-
-	/*struct VertexShaerInput {
-		float32_t4 position : POSITION0;
-
-	};*/
-
 	//DepthStencilStateの設定
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
 	//Depthの機能を有効化する
@@ -823,7 +817,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		IID_PPV_ARGS(&graphicsPipelineState));
 
 	assert(SUCCEEDED(hr));
-
 	
 
 	//↓ここ02_02,p08
@@ -837,9 +830,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	wvpData->World = MakeIdentity4x4();
 
 	wvpData->WorldInverseTranspose = MakeIdentity4x4();
-
-
-	//↑ここ02_02,p08
+	
 
 	//分割数
 	//16 * 16 * 6
@@ -858,15 +849,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	materialData->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	materialData->enableLighting = true;
 	materialData->shininess = 50;
-
-
-	//ここまで02_01 p13
+	
 
 	assert(SUCCEEDED(hr));
-
-	
-	
-
 
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
@@ -989,10 +974,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 
 
-
 	//Sprite用の頂点リソースを作る
 	ID3D12Resource* vertexResourceSprite = CreateBufferResource(device, sizeof(VertexData) * 6);
-
 
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
@@ -1030,10 +1013,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	vertexDateSprite[3].texcoord = { 1.0f,0.0f };
 
 	vertexDateSprite[3].normal = { 0.0f,0.0f ,-1.0f };
-
-	
-
-
+		
 
 	//Sprite用のTransformationMatrix用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
 	ID3D12Resource* transformationMatrixResourceSprite = CreateBufferResource(device, sizeof(TransformationMatrix));
@@ -1043,9 +1023,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	transformationMatrixResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
 	//単位行列を書き込んでいく
 	transformationMatrixDataSprite->World = MakeIdentity4x4();
-
 	
-	//↑03_00 p11
 
 	//Sprite用のリソースを作る。今回はcolor１つ分のサイズを用意する
 	ID3D12Resource* materialResourceSprite = CreateBufferResource(device, sizeof(Material));
@@ -1057,10 +1035,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	materialDataSprite->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	materialDataSprite->enableLighting = false;
-
-	
-
-	//ここまで02_01 p13
 
 	
 	//マテリアル用のリソースを作る。今回はcolor１つ分のサイズを用意する
@@ -1075,8 +1049,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directionalLightData->direction = { 0.0f,-1.0f,0.0f };
 
 	directionalLightData->intensity = 1.0f;
-	//ここまで04_03 p17
-
+	
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
 	//クライアント領域のサイズと一緒にして画面全体に表示
@@ -1095,7 +1068,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	scissorRect.top = 0;
 	scissorRect.bottom = kClientHeight;
 
-
 	ID3D12Resource* indexResourceSprite = CreateBufferResource(device, sizeof(uint32_t) * 6);
 	
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
@@ -1113,7 +1085,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	indexDataSprite[3] = 1; indexDataSprite[4] = 3; indexDataSprite[5] = 2;
 
 
-
 	//カメラ用リソース
 	ID3D12Resource* cameraResource = CreateBufferResource(device, sizeof(CameraForGPU));
 
@@ -1122,7 +1093,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	cameraResource->Map(0, nullptr, reinterpret_cast<void**>(&cameraDate));
 
 	cameraDate->worldPosition = cameraTransform.translate;
-
 
 	//Imguiの初期化。
 	//こういうもん
@@ -1148,7 +1118,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const DirectX::TexMetadata& metadata2 = mipImages2.GetMetadata();
 	ID3D12Resource* textureResource2 = CreateTexureResource(device, metadata2);
 	UploadTextureData(textureResource2, mipImages2);
-
 
 
 	//metaDataを基にSRVの設定
@@ -1188,8 +1157,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 	//SRVの生成
 	device->CreateShaderResourceView(textureResource2, &srvDesc2, textureSrvHandleCPU2);
-
-
 	
 
 	MSG msg{};
@@ -1248,7 +1215,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::DragFloat3("LightDirection", &directionalLightData->direction.x, 0.005f);
 			ImGui::DragFloat("LightIntensity", &directionalLightData->intensity, 0.1f);
 
-
 			
 			ImGui::End();
 
@@ -1256,17 +1222,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//ImGuiの内部コマンドを生成する
 			ImGui::Render();
-
-			
-			
-
-			
+						
+						
 			// 描画処理 
 			 
 			//ここから書き込むバックバッファのインデックスを取得
 			UINT buckBufferIndex = swapChain->GetCurrentBackBufferIndex();
-
-			
+						
 			//TransitionBarrierの設定↓01_02 p6
 			D3D12_RESOURCE_BARRIER barrier{};
 
@@ -1280,13 +1242,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 
+			//TransitionBarrierの設定
 			commandList->ResourceBarrier(1, &barrier);
-
-			//TransitionBarrierの設定↑
-
-
-			
-			
+						
 
 			//ClearRenderTargetView
 			float clearColor[] = { 0.0f,0.25f,0.5f,1.0f };
@@ -1294,10 +1252,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//描画先のRTVとDSVを設定する
 			D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 			commandList->OMSetRenderTargets(1, &rtvHandles[buckBufferIndex], false, &dsvHandle);
-
-			
-
-			
+						
 			commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 			//描画用のDescriptorHeapの設定
@@ -1315,7 +1270,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//マテリアルのCBufferの場所を設定
 			commandList->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
 
-			
 
 			//wvp用のCBufferの場所を設定
 			commandList->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
@@ -1346,8 +1300,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			////マテリアルのCBufferの場所を設定
 			//commandList->SetGraphicsRootConstantBufferView(0, materialResourceSprite->GetGPUVirtualAddress());
 
-			//
-
 
 			////TransformationMatrixCBufferの場所を設定
 			//commandList->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
@@ -1366,8 +1318,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 
 			commandList->ResourceBarrier(1, &barrier);
-
-			
+						
 
 			hr = commandList->Close();
 			assert(SUCCEEDED(hr));
@@ -1378,7 +1329,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			commandQueue->ExecuteCommandLists(1, commandLists);
 
 			swapChain->Present(1, 0);
-
 
 
 			//Fenceの更新
@@ -1440,8 +1390,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	debugController->Release();
 
 #endif // _DEBUG
-
-
 
 
 	CloseWindow(hwnd);
