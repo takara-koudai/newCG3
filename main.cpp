@@ -199,7 +199,6 @@ IDxcBlob* CompileShader(
 	return ShaderBlob;
 }
 
-
 DirectX::ScratchImage LoadTexture(const std::string& filePath) 
 {
 	//テクスチャファイルを読んでプログラムを扱えるようにする
