@@ -16,7 +16,7 @@
     <ProjectGuid>{ce681803-f806-4fe8-9cf7-e167e13a82d8}</ProjectGuid>
     <RootNamespace>DirectX</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>DirectX_CG2</ProjectName>
+    <ProjectName>DirectX_CG3</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
