@@ -1204,6 +1204,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			ImGui::Begin("Window");
 			
+			ImGui::SetNextItemWidth(-FLT_MIN);
+
+			float material[] =
+			{
+				directionalLightData->color.x,
+				directionalLightData->color.y,
+				directionalLightData->color.z,
+				directionalLightData->color.w
+			};
+
+			ImGui::ColorPicker3("ColorPicker3", (float*)material);
+			ImGui::SliderFloat4("material", material, 0.0f, 1.0f);
+
 			ImGui::DragFloat3("cameraRotate", &cameraTransform.rotate.x, 0.01f);
 			ImGui::DragFloat3("cameraTranslate", &cameraTransform.translate.x, 0.1f);
 			ImGui::DragFloat3("scale", &transform.scale.x, 0.1f);
@@ -1213,11 +1226,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::DragFloat3("LightColor", &directionalLightData->color.x, 0.1f);
 			ImGui::DragFloat3("LightDirection", &directionalLightData->direction.x, 0.005f);
 			ImGui::DragFloat("LightIntensity", &directionalLightData->intensity, 0.1f);
-
 			
 			ImGui::End();
 
-			ImGui::ShowDemoWindow();
+			directionalLightData->color.x = material[0];
+			directionalLightData->color.y = material[1];
+			directionalLightData->color.z = material[2];
+			directionalLightData->color.w = material[3];
+			
+
+			//ImGui::ShowDemoWindow();
 
 			//ImGuiの内部コマンドを生成する
 			ImGui::Render();
